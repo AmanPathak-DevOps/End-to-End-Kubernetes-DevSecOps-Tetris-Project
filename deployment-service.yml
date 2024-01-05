@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: tetris
-        image: sevenajay/tetrisv2:latest
+        image: imageTag
         ports:
         - containerPort: 3000   # Use port 3000
 
