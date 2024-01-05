@@ -1,0 +1,79 @@
+pipeline {
+    agent any 
+    tools {
+        jdk 'jdk'
+        nodejs 'nodejs'
+    }
+    environment  {
+        SCANNER_HOME=tool 'sonar-scanner'
+    }
+    stages {
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'master', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-DevSecOps-Tetris-Project.git'
+            }
+        }
+        stage('Sonarqube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=TetrisVersion1.0 \
+                    -Dsonar.projectKey=TetrisVersion1.0 '''
+                }
+            }
+        }
+        stage('Quality Check') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                }
+            }
+        }
+        stage('Installing Dependencies') {
+            step {
+                sh 'npm install'
+            }
+        }
+        stage('OWAS FS Scan') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('Trivy File Scan') {
+            step {
+                sh 'trivy fs . >trivyfs.txt'
+            }
+        }
+        stage("Docker Image Build"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
+                       sh "docker system prune -f"
+                       sh "docker container prune -f"
+                       sh "docker build -t tetrisv1 ."
+                    }
+                }
+            }
+        }
+        stage("Docker Image Pushing"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
+                       sh "docker tag tetrisv1 avian19/tetrisv1:latest "
+                       sh "docker push avian19/tetrisv1:latest "
+                    }
+                }
+            }
+        }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image avian19/tetrisv1:latest > trivyimage.txt" 
+            }
+        }
+    }
+}
