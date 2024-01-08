@@ -34,45 +34,65 @@ pipeline {
             }
         }
         stage('Installing Dependencies') {
-            step {
+            steps {
                 sh 'npm install'
             }
         }
-        stage('OWAS FS Scan') {
+        stage('OWASP Dependency-Check Scan') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
         stage('Trivy File Scan') {
-            step {
-                sh 'trivy fs . >trivyfs.txt'
+            steps {
+                sh 'trivy fs . > trivyfs.txt'
             }
         }
-        stage("Docker Image Build"){
-            steps{
-                script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker system prune -f"
-                       sh "docker container prune -f"
-                       sh "docker build -t tetrisv1 ."
+        stage("Docker Image Build") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {   
+                        sh 'docker system prune -f'
+                        sh 'docker container prune -f'
+                        sh 'docker build -t tetrisv1 .'
                     }
                 }
             }
         }
-        stage("Docker Image Pushing"){
-            steps{
-                script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker tag tetrisv1 avian19/tetrisv1:latest "
-                       sh "docker push avian19/tetrisv1:latest "
+        stage("Docker Image Pushing") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {   
+                        sh 'docker tag tetrisv1 avian19/tetrisv1:latest'
+                        sh 'docker push avian19/tetrisv1:latest'
                     }
                 }
             }
         }
-        stage("TRIVY"){
-            steps{
-                sh "trivy image avian19/tetrisv1:latest > trivyimage.txt" 
+        stage("TRIVY Image Scan") {
+            steps {
+                sh 'trivy image avian19/tetrisv1:latest > trivyimage.txt' 
+            }
+        }
+        stage('Checkout Code') {
+            steps {
+                git branch: 'master', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-DevSecOps-Tetris-Project.git'
+            }
+        }
+        stage('Update Deployment file') {
+            environment {
+                GIT_REPO_NAME = "End-to-End-Kubernetes-DevSecOps-Tetris-Project"
+                GIT_USER_NAME = "AmanPathak-DevOps"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        BUILD_NUMBER=${BUILD_NUMBER}
+                        imageTag=$(grep -oP '(?<=tetrisv1:)[^ ]+' deployment-service.yml)
+                        sed -i "s/tetrisv1:${imageTag}/tetrisv1:${BUILD_NUMBER}/" deployment-service.yml
+                    '''
+                }
             }
         }
     }

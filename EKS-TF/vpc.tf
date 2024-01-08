@@ -7,7 +7,7 @@ data "aws_vpc" "vpc" {
 
 data "aws_internet_gateway" "igw" {
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = [var.igw-name]
   }
 }
@@ -16,6 +16,13 @@ data "aws_subnet" "subnet" {
   filter {
     name   = "tag:Name"
     values = [var.subnet-name]
+  }
+}
+
+data "aws_security_group" "sg-default" {
+  filter {
+    name   = "tag:Name"
+    values = [var.security-group-name]
   }
 }
 
@@ -44,5 +51,5 @@ resource "aws_route_table" "rt2" {
 
 resource "aws_route_table_association" "rt-association2" {
   route_table_id = aws_route_table.rt2.id
-  subnet_id = aws_subnet.public-subnet2.id
+  subnet_id      = aws_subnet.public-subnet2.id
 }
