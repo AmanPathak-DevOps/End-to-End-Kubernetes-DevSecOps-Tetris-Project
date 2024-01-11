@@ -13,42 +13,49 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-DevSecOps-Tetris-Project.git'
             }
         }
-        stage('Checking TF version..') {
-            steps {
-                script {
-                    sh 'terraform --version'
-                }
-            }
-        }
+        // stage('Checking TF version..') {
+        //     steps {
+        //         script {
+        //             sh 'terraform --version'
+        //         }
+        //     }
+        // }
         stage('Initializing Terraform') {
             steps {
+                withAWS(credentials: 'aws-key', region: 'us-east-1') {
                 dir('EKS-TF') {
                     script {
                         sh 'terraform init'
                     }
                 }
+                }
             }
         }
         stage('Validate Terraform Code') {
             steps {
+                withAWS(credentials: 'aws-key', region: 'us-east-1') {
                 dir('EKS-TF') {
                     script {
                         sh 'terraform validate'
                     }
                 }
+                }
             }
         }
         stage('Terraform Plan') {
             steps {
+                withAWS(credentials: 'aws-key', region: 'us-east-1') {
                 dir('EKS-TF') {
                     script {
                         sh "terraform plan -var-file=${params.'File-Name'}"
                     }
                 }
+                }
             }
         }
         stage('Terraform Action') {
             steps {
+                withAWS(credentials: 'aws-key', region: 'us-east-1') { 
                 script {
                     echo "${params.'Terraform-Action'}"
                     dir('EKS-TF') {
@@ -62,6 +69,7 @@ pipeline {
                             }
                         }
                     }
+                }
                 }
             }
         }

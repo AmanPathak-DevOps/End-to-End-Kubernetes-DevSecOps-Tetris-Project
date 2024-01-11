@@ -39,7 +39,7 @@ resource "aws_route_table" "rt" {
 
 resource "aws_route_table_association" "rt-association" {
   route_table_id = aws_route_table.rt.id
-  subnet_id = aws_subnet.public-subnet.id
+  subnet_id      = aws_subnet.public-subnet.id
 }
 
 resource "aws_security_group" "security-group" {
