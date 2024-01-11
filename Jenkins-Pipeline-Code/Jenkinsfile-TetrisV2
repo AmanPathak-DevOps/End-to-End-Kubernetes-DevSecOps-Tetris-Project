@@ -82,7 +82,7 @@ pipeline {
         }
         stage("TRIVY Image Scan") {
             steps {
-                sh 'trivy image avian19/tetrisv2:latest > trivyimage.txt' 
+                sh 'trivy image avian19/tetrisv2:${BUILD_NUMBER} > trivyimage.txt' 
             }
         }
         stage('Checkout Code') {
