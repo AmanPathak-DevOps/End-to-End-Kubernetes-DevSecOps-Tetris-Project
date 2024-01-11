@@ -17,18 +17,4 @@ spec:
       - name: tetris
         image: avian19/tetrisv2:latest
         ports:
-        - containerPort: 3000   # Use port 3000
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tetris-service
-spec:
-  selector:
-    app: tetris
-  ports:
-  - protocol: TCP
-    port: 80                 # Expose port 80
-    targetPort: 3000
-  type: LoadBalancer
+        - containerPort: 3000
