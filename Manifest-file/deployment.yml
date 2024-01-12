@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: tetris
-        image: avian19/tetrisv2:latest
+        image: avian19/tetrisv1:latest
         ports:
         - containerPort: 3000
