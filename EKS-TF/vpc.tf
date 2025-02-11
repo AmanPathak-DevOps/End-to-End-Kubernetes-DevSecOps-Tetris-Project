@@ -29,7 +29,7 @@ data "aws_security_group" "sg-default" {
 resource "aws_subnet" "public-subnet2" {
   vpc_id                  = data.aws_vpc.vpc.id
   cidr_block              = "10.0.2.0/24"
-  availability_zone       = "ap-south-1a"
+  availability_zone       = "ap-south-1b"
   map_public_ip_on_launch = true
 
   tags = {
