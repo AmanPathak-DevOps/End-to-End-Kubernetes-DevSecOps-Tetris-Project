@@ -1,7 +1,7 @@
 # 🚀 End-to-End DevSecOps Kubernetes Project 🌐
 
 [![LinkedIn](https://img.shields.io/badge/Connect%20with%20me%20on-LinkedIn-blue.svg)](https://www.linkedin.com/in/aman-devops/)
-[![GitHub](https://img.shields.io/github/stars/AmanPathak-DevOps.svg?style=social)](https://github.com/AmanPathak-DevOps)
+[![GitHub](https://img.shields.io/github/stars/SeanGuoAU.svg?style=social)](https://github.com/SeanGuoAU)
 ![DevSecOps](https://img.shields.io/badge/DevSecOps-Mastery-brightgreen)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Orchestration-blueviolet)
 ![Jenkins](https://img.shields.io/badge/Jenkins-Automation-orange)
@@ -27,7 +27,7 @@ Welcome to an immersive DevSecOps learning experience! This project guides you t
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-DevSecOps-Tetris-Project.git
+   git clone https://github.com/SeanGuoAU/End-to-End-Kubernetes-DevSecOps-Tetris-Project
 2. **Explore the Directories:**
    Navigate into each directory to find detailed scripts, pipelines, and configurations.
 

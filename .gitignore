@@ -1,0 +1,14 @@
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.backup
+*.tfvars*
+terraform.tfstate.d/
+# Ignore Terraform-related directories
+.terraform/
+Jenkins-Server-TF/.terraform/
+*.terraform.lock.hcl
+
+# Ignore crash logs
+*crash.log
+
+Jenkins-Server-TF/eks-test1.pem
