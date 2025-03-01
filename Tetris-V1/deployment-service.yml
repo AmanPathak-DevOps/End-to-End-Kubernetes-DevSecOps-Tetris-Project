@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: tetris
-        image: 536697265710.dkr.ecr.ap-south-1.amazonaws.com/tetris-app/tetrisv1:latest
+        image: 536697265710.dkr.ecr.ap-south-1.amazonaws.com/tetris-app:tetrisv1:latest
         ports:
         - containerPort: 3000
 ---
@@ -28,6 +28,6 @@ spec:
     app: tetris
   ports:
   - protocol: TCP
-    port: 80                
+    port: 80
     targetPort: 3000
   type: LoadBalancer
