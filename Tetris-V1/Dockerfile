@@ -1,18 +1,25 @@
- Use the official Node.js 16 image as the base imageFROM node:16
+# Use the official Node.js 16 image as the base image
+FROM node:16
+
+# Create a non-root user and group
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
 # Set the working directory inside the container
 WORKDIR /app
-# Copy package.json and package-lock.json (or yarn.lock) to the containerCOPY package*.json ./
-# Install project dependencies
-RUN npm install
 
-# Copy the rest of the application code to the container
-# Copy only package.json and package-lock.json first
+# Copy package.json and package-lock.json (or yarn.lock) to the container
 COPY package*.json ./
 
-# Install dependencies
+# Install project dependencies as a non-root user
 RUN npm install
 
-# Copy only necessary source files
+# Change ownership of the /app directory to the non-root user
+RUN chown -R appuser:appuser /app
+
+# Set the user to the non-root user
+USER appuser
+
+# Copy the necessary application files to the container
 COPY src/ ./src
 COPY public/ ./public
 COPY images/ ./images
