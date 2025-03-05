@@ -11,6 +11,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install project dependencies as a non-root user
+# Set npm cache directory to a place where appuser can write
+RUN npm config set cache /app/.npm-cache --global
 RUN npm install
 
 # Change ownership of the /app directory to the non-root user
