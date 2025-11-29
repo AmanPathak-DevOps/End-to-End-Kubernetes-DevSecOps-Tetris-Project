@@ -29,7 +29,7 @@ sudo chmod 777 /var/run/docker.sock
 docker run -d --name sonarqube -p 9000:9000 sonarqube:community
 
 
-# Installing AWS CLI
+# Installing Terraform
 sudo apt install unzip -y
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
 wget -O- https://apt.releases.hashicorp.com/gpg | \
@@ -51,7 +51,7 @@ echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 
-# Installing Terraform
+# Installing AWS CLI v2
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
