@@ -11,7 +11,6 @@ resource "aws_eks_node_group" "eks-node-group" {
     min_size     = 1
   }
 
-  ami_type       = "AL2_x86_64"
   instance_types = ["t3a.medium"]
   disk_size      = 20
 
